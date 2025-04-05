@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "514640492047",
+    "project_id": "realtime-innovations-pro-ed191",
+    "storage_bucket": "realtime-innovations-pro-ed191.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:514640492047:android:0be90b1a3f7f015450557a",
+        "android_client_info": {
+          "package_name": "com.realtimeinnovations.project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNa2aPWaIQ2VmBZj6FnCJD0-Nk9ddo5Bo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
