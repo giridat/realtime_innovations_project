@@ -53,7 +53,7 @@ This project has been developed using the **BLoC state management** pattern and 
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/employee_manager_flutter.git
+   git clone https://github.com/giridat/realtime_innovations_project
    cd employee_manager_flutter
    ```
 
