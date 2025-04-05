@@ -154,7 +154,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   runApp(await builder());
 
-  if (!kIsWeb) {
+  if (kIsWeb) {
     final StreamSubscription<InternetState> internetSubscription;
 
     void handleInternetStateChange(InternetState state) {

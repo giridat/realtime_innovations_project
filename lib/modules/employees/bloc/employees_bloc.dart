@@ -276,13 +276,16 @@ class EmployeesBloc extends Bloc<EmployeesEvent, EmployeesState> {
     final box = Hive.box<EmployeeDetailsViewModel>(HiveTypes.employeeBox);
     List<EmployeeDetailsViewModel> mergedData = [];
 
-    bool isConnected = true; // Assume connected by default for web
+    bool isConnected = true;
 
     if (!kIsWeb) {
-      // Wait for a valid internet state if it's still initial
+      // Ensure internet status is known before continuing
       if (Instance.internetBloc.state is InternetInitial) {
         await Instance.internetBloc.stream.firstWhere(
-              (state) => state is InternetAvailable || state is InternetConnected,
+              (state) =>
+          state is InternetAvailable ||
+              state is InternetConnected ||
+              state is InternetDisconnected,
         );
       }
 
@@ -298,23 +301,23 @@ class EmployeesBloc extends Bloc<EmployeesEvent, EmployeesState> {
       );
 
       if (apiData == null) {
+        mergedData = box.values.toList();
         emit(ErrorGettingEmployeesState(
-            errorMessage: "Error getting employees"));
-        return;
-      }
+          errorMessage: "Error getting employees from server. Showing local data.",
+        ));
+      } else {
+        final localData = box.values.toList();
 
-      final localData = box.values.toList();
+        final Map<String, EmployeeDetailsViewModel> mergedMap = {
+          for (var e in localData) e.id: e,
+          for (var e in apiData) e.id: e,
+        };
 
-      // Merge local + API data using ID
-      final Map<String, EmployeeDetailsViewModel> mergedMap = {
-        for (var e in localData) e.id: e,
-        for (var e in apiData) e.id: e,
-      };
+        mergedData = mergedMap.values.toList();
 
-      mergedData = mergedMap.values.toList();
-
-      for (final employee in mergedData) {
-        box.put(employee.id, employee);
+        for (final employee in mergedData) {
+          box.put(employee.id, employee);
+        }
       }
     } else {
       mergedData = box.values.toList();
@@ -335,6 +338,10 @@ class EmployeesBloc extends Bloc<EmployeesEvent, EmployeesState> {
       previousEmployees: previousEmployees,
     ));
   }
+
+
+
+
 
 
   FutureOr<void> _addEmployee(

@@ -13,39 +13,47 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return !kIsWeb
-        ? BlocProvider(
-            create: (context) => InternetBloc(),
-            child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              key: Instance.scaffoldState,
-              navigatorObservers: [RouteObserverService()],
-              navigatorKey: Instance.navigatorKey,
-              title: 'Realtime Innovations Project',
-              theme: ThemeData(
-                fontFamily: GoogleFonts.roboto().fontFamily,
-                primarySwatch: Colors.blue,
-              ),
-              home: BlocProvider(
-                create: (context) => EmployeesBloc()..add(GetEmployees()),
-                child: EmployeesMain(),
-              ),
-            ),
-          )
-        : MaterialApp(
-            key: Instance.scaffoldState,
-            debugShowCheckedModeBanner: false,
-            navigatorObservers: [RouteObserverService()],
-            navigatorKey: Instance.navigatorKey,
-            title: 'Realtime Innovations Project',
-            theme: ThemeData(
-              fontFamily: GoogleFonts.roboto().fontFamily,
-              primarySwatch: Colors.blue,
-            ),
-            home: BlocProvider(
-              create: (context) => EmployeesBloc()..add(GetEmployees()),
-              child: EmployeesMain(),
-            ),
-          );
+    return !kIsWeb?BlocProvider(
+      create: (context) => InternetBloc(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        key: Instance.scaffoldState,
+        navigatorObservers: [RouteObserverService()],
+        navigatorKey: Instance.navigatorKey,
+        title: 'Realtime Innovations Project',
+        theme: ThemeData(
+          fontFamily: 'Roboto',
+          primarySwatch: Colors.blue,
+          textTheme: const TextTheme(
+            bodyLarge: TextStyle(fontSize: 18),
+            bodyMedium: TextStyle(fontSize: 16),
+            bodySmall: TextStyle(fontSize: 14),
+          ),
+        ),
+        home: BlocProvider(
+          create: (context) => EmployeesBloc()..add(GetEmployees()),
+          child: EmployeesMain(),
+        ),
+      ),
+    ):MaterialApp(
+      debugShowCheckedModeBanner: false,
+      key: Instance.scaffoldState,
+      navigatorObservers: [RouteObserverService()],
+      navigatorKey: Instance.navigatorKey,
+      title: 'Realtime Innovations Project',
+      theme: ThemeData(
+        fontFamily: 'Roboto',
+        primarySwatch: Colors.blue,
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(fontSize: 18),
+          bodyMedium: TextStyle(fontSize: 16),
+          bodySmall: TextStyle(fontSize: 14),
+        ),
+      ),
+      home: BlocProvider(
+        create: (context) => EmployeesBloc()..add(GetEmployees()),
+        child: EmployeesMain(),
+      ),
+    );
   }
 }

@@ -40,19 +40,19 @@ class EmployeeListTile extends StatelessWidget {
                   Text(
                     employeeDetailsViewModel.name,
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 16),
+                        fontWeight: FontWeight.w500, fontSize: 16,),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     employeeDetailsViewModel.role,
-                    style: const TextStyle(color: Colors.grey, fontSize: 14),
+                    style: const TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w400),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     employeeDetailsViewModel.endDate.isNotEmpty
                         ? "${employeeDetailsViewModel.startDate} - ${employeeDetailsViewModel.endDate}"
                         : "From ${employeeDetailsViewModel.startDate}",
-                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                    style: const TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
