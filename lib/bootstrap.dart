@@ -154,39 +154,39 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   runApp(await builder());
 
-  if (kIsWeb) {
-    final StreamSubscription<InternetState> internetSubscription;
-
-    void handleInternetStateChange(InternetState state) {
-      switch (state) {
-        case InternetDisconnected():
-          Instance.navigatorKey.currentState!.push(
-            MaterialPageRoute<void>(
-              settings: const RouteSettings(name: '/no-internet'),
-              builder: (context) => const NoInternetScreen(),
-            ),
-          );
-        case InternetAvailable():
-          final canPop = Instance.navigatorKey.currentState!.canPop();
-          if (canPop == true &&
-              Instance.navigatorKey.currentWidget.toString() == '/no-internet') {
-            Instance.navigatorKey.currentState!.pop();
-          }
-
-        case InternetConnected():
-          final canPop = Instance.navigatorKey.currentState!.canPop();
-          if (canPop == true &&
-              Instance.navigatorKey.currentWidget.toString() == '/no-internet') {
-            Instance.navigatorKey.currentState!.pop();
-          }
-
-        default:
-          break;
-      }
-    }
-
-    internetSubscription = Instance.internetBloc.stream.listen(
-      handleInternetStateChange,
-    );
-  }
+  // if (!kIsWeb) {
+  //   final StreamSubscription<InternetState> internetSubscription;
+  //
+  //   void handleInternetStateChange(InternetState state) {
+  //     switch (state) {
+  //       case InternetDisconnected():
+  //         Instance.navigatorKey.currentState!.push(
+  //           MaterialPageRoute<void>(
+  //             settings: const RouteSettings(name: '/no-internet'),
+  //             builder: (context) => const NoInternetScreen(),
+  //           ),
+  //         );
+  //       case InternetAvailable():
+  //         final canPop = Instance.navigatorKey.currentState!.canPop();
+  //         if (canPop == true &&
+  //             Instance.navigatorKey.currentWidget.toString() == '/no-internet') {
+  //           Instance.navigatorKey.currentState!.pop();
+  //         }
+  //
+  //       case InternetConnected():
+  //         final canPop = Instance.navigatorKey.currentState!.canPop();
+  //         if (canPop == true &&
+  //             Instance.navigatorKey.currentWidget.toString() == '/no-internet') {
+  //           Instance.navigatorKey.currentState!.pop();
+  //         }
+  //
+  //       default:
+  //         break;
+  //     }
+  //   }
+  //
+  //   internetSubscription = Instance.internetBloc.stream.listen(
+  //     handleInternetStateChange,
+  //   );
+  // }
 }
