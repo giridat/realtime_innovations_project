@@ -47,14 +47,6 @@ This project has been developed using the **BLoC state management** pattern and 
 
 ---
 
-## 📷 Deliverables
-
-- ✅ Final APK: [Download APK](#)
-- ✅ GitHub Repository: [GitHub Link](#)
-- ✅ Web App (Hosted): [Web App Link](#)
-- ✅ Screen Recording: [Video Walkthrough](#)
-
----
 
 
 ## 💡 Setup Instructions

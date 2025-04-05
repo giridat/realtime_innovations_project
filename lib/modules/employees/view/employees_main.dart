@@ -61,8 +61,13 @@ class _EmployeesMainState extends State<EmployeesMain> {
               child: NestedScrollView(
                 physics: NeverScrollableScrollPhysics(),
                 controller: scrollController,
-                body: EmployeesListView(
-                  scrollController: scrollController,
+                body: RefreshIndicator(
+                  onRefresh: () async {
+                    context.read<EmployeesBloc>().add(GetEmployees());
+                  },
+                  child: EmployeesListView(
+                    scrollController: scrollController,
+                  ),
                 ),
                 headerSliverBuilder:
                     (BuildContext context, bool innerBoxIsScrolled) {
@@ -73,7 +78,7 @@ class _EmployeesMainState extends State<EmployeesMain> {
                       snap: true,
                       backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
-                      actions: kIsWeb? [
+                      actions:[
                         //add refresh
                         IconButton(
                           icon: const Icon(Icons.refresh),
@@ -81,7 +86,7 @@ class _EmployeesMainState extends State<EmployeesMain> {
                             context.read<EmployeesBloc>().add(GetEmployees());
                           },
                         ),
-                      ]:null,
+                      ],
                     )
                   ];
                 },

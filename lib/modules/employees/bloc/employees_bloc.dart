@@ -278,8 +278,8 @@ class EmployeesBloc extends Bloc<EmployeesEvent, EmployeesState> {
 
     bool isConnected = true;
 
+    // Only check for internet connectivity on non-web platforms
     if (!kIsWeb) {
-      // Ensure internet status is known before continuing
       if (Instance.internetBloc.state is InternetInitial) {
         await Instance.internetBloc.stream.firstWhere(
               (state) =>
@@ -293,34 +293,33 @@ class EmployeesBloc extends Bloc<EmployeesEvent, EmployeesState> {
           Instance.internetBloc.state is InternetConnected;
     }
 
-    if (isConnected) {
-      final response = await Instance.employeesRepo.getCurrentEmployeeList();
-      final apiData = response?.fold<List<EmployeeDetailsViewModel>?>(
-            (l) => null,
-            (r) => r,
-      );
+    // Always hit the API, regardless of platform
+    final response = await Instance.employeesRepo.getCurrentEmployeeList();
+    final apiData = response?.fold<List<EmployeeDetailsViewModel>?>(
+          (l) => null,
+          (r) => r,
+    );
 
-      if (apiData == null) {
-        mergedData = box.values.toList();
-        emit(ErrorGettingEmployeesState(
-          errorMessage: "Error getting employees from server. Showing local data.",
-        ));
-      } else {
-        final localData = box.values.toList();
-
-        final Map<String, EmployeeDetailsViewModel> mergedMap = {
-          for (var e in localData) e.id: e,
-          for (var e in apiData) e.id: e,
-        };
-
-        mergedData = mergedMap.values.toList();
-
-        for (final employee in mergedData) {
-          box.put(employee.id, employee);
-        }
-      }
-    } else {
+    if (apiData == null || (!kIsWeb && !isConnected)) {
       mergedData = box.values.toList();
+      emit(ErrorGettingEmployeesState(
+        errorMessage: "Error getting employees from server. Showing local data.",
+      ));
+    } else {
+      await box.clear();
+
+      final localData = box.values.toList();
+
+      final Map<String, EmployeeDetailsViewModel> mergedMap = {
+        for (var e in localData) e.id: e,
+        for (var e in apiData) e.id: e,
+      };
+
+      mergedData = mergedMap.values.toList();
+
+      for (final employee in mergedData) {
+        box.put(employee.id, employee);
+      }
     }
 
     final currentEmployees =
@@ -338,6 +337,7 @@ class EmployeesBloc extends Bloc<EmployeesEvent, EmployeesState> {
       previousEmployees: previousEmployees,
     ));
   }
+
 
 
 
