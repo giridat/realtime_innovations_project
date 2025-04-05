@@ -1,0 +1,273 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:realtime_innovations_project/common/helper_methods.dart';
+import 'package:realtime_innovations_project/common/instances.dart';
+import 'package:realtime_innovations_project/common/widgets/custom_noti.dart';
+import 'package:realtime_innovations_project/modules/employees/bloc/employees_bloc.dart';
+import 'package:bot_toast/bot_toast.dart';
+import 'package:realtime_innovations_project/modules/employees/widgets/add_employee_details_form_body.dart';
+import 'package:realtime_innovations_project/modules/employees/widgets/employees_list_view.dart';
+
+class EmployeesMain extends StatefulWidget {
+  const EmployeesMain({super.key});
+
+  @override
+  State<EmployeesMain> createState() => _EmployeesMainState();
+}
+
+class _EmployeesMainState extends State<EmployeesMain> {
+  late final TextEditingController employeesController;
+  late final FocusNode employeesFocusNode;
+  late final ScrollController scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    employeesController = TextEditingController();
+    employeesFocusNode = FocusNode();
+    scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    employeesController.dispose();
+    employeesFocusNode.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<EmployeesBloc, EmployeesState>(
+        listener: _listener,
+        child: Scaffold(
+            backgroundColor: Color.fromRGBO(242, 242, 242, 1),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                context.read<EmployeesBloc>().add(Navigate());
+              },
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10), // Rounded corners
+              ),
+              backgroundColor: Colors.blue, // Background color
+              child: const Icon(Icons.add,
+                  color: Colors.white, size: 30), // Plus icon
+            ),
+            body: RefreshIndicator(
+              onRefresh: () async {
+                context.read<EmployeesBloc>().add(GetEmployees());
+              },
+              child: NestedScrollView(
+                physics: NeverScrollableScrollPhysics(),
+                controller: scrollController,
+                body: EmployeesListView(
+                  scrollController: scrollController,
+                ),
+                headerSliverBuilder:
+                    (BuildContext context, bool innerBoxIsScrolled) {
+                  return <Widget>[
+                    const SliverAppBar(
+                      title: Text('Employee List'),
+                      floating: true,
+                      snap: true,
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                    )
+                  ];
+                },
+              ),
+            )));
+  }
+
+  Future<void> _listener(BuildContext context, EmployeesState state) async {
+    switch (state) {
+      case Navigating():
+        break;
+      case Navigated():
+        final form = state.model;
+        if (form != null) {
+          employeesController.text = form.name;
+          await Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return BlocProvider<EmployeesBloc>.value(
+              value: BlocProvider.of<EmployeesBloc>(context),
+              child: AddEmployeeDetailsFormBody(
+                nameFocusNode: employeesFocusNode,
+                nameController: employeesController,
+                employee: form,
+              ),
+            );
+          }));
+        } else {
+          setState(() {
+            employeesController.text = '';
+          });
+
+          await Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return BlocProvider<EmployeesBloc>.value(
+              value: BlocProvider.of<EmployeesBloc>(context),
+              child: AddEmployeeDetailsFormBody(
+                nameFocusNode: employeesFocusNode,
+                nameController: employeesController,
+              ),
+            );
+          }));
+        }
+      case InitialEmployeesState():
+        break;
+      case GettingEmployeesState():
+        break;
+      case GotEmployeesState():
+        break;
+      case ErrorGettingEmployeesState():
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 2),
+            content: Text(
+              state.errorMessage,
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+
+      case AddingEmployeeState():
+        break;
+      case AddedEmployeeState():
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+            content: Text(
+              'Employee added successfully!',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+
+        if (Navigator.canPop(context)) Navigator.pop(context);
+
+      case ErrorAddingEmployeeState():
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 2),
+            content: Text(
+              state.errorMessage,
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+
+      case UpdatingEmployeeState():
+        break;
+      case UpdatedEmployeeState():
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 2),
+            content: Text(
+              'Employee updated successfully!',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+
+      case ErrorUpdatingEmployeeState():
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 2),
+            content: Text(
+              state.errorMessage,
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+
+      case DeletingEmployeeState():
+        break;
+      case DeletedEmployeeState():
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 4),
+            action: SnackBarAction(
+                label: 'Undo',
+                onPressed: () {
+                  context.read<EmployeesBloc>().add(RestoreDeletedEmployee());
+                }),
+            content: Text(
+              'Employee deleted successfully!',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+
+        if (Navigator.canPop(context)) {
+          Navigator.pop(context);
+        }
+      case ErrorDeletingEmployeeState():
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 2),
+            content: Text(
+              state.errorMessage,
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+
+      case CreateNameInputFieldState():
+        break;
+      case ValidateNameInputFieldState():
+        break;
+      case SettingRole():
+        break;
+      case RoleSetSuccessfully():
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 2),
+            content: Text(
+              'Employee Role Set!!',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+
+      case SelectingStartDate():
+        break;
+      case StartDateSelected():
+        break;
+      case SelectingEndDate():
+        break;
+      case EndDateSelected():
+        break;
+      case CheckingFormState():
+        break;
+      case FormValidatedSuccessfully():
+        break;
+      case ErrorValidatingFormState():
+        break;
+      case RestoringDeletedEmployeeState():
+        break;
+      case RestoredDeletedEmployeeState():
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 2),
+            content: Text(
+              'Employee Restored Successfully!',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+    }
+  }
+}
