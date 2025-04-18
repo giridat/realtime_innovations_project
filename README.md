@@ -1,101 +1,102 @@
-# 📱 Employee Manager – Flutter App Task
+# 📱 Employee Manager – Flutter App
 
-This is a submission for the technical task assigned by **Realtime Innovations** as part of the hiring process.
+A personal Flutter project designed to demonstrate clean architecture, BLoC state management, and local data persistence using Hive. The **Employee Manager** app is a CRUD-based system where users can manage employee information efficiently with a responsive and pixel-perfect UI.
 
 ---
 
 ## 📌 Project Overview
 
-The **Employee Manager** is a Flutter-based CRUD application where users can:
+The **Employee Manager** is a lightweight and efficient Flutter application that enables users to:
 
-- Add new employee data
-- Edit existing employee information
-- Delete employee entries
-- View a list of employees with details
-- Pick and store dates with a custom date picker
-- Persist data locally using a local database
-- Experience a pixel-perfect UI on all mobile screen sizes
+- Add new employee data  
+- Edit existing employee information  
+- Delete employee entries  
+- View a detailed employee list  
+- Use a custom date picker for selecting and storing dates  
+- Persist data locally via Hive database  
+- Enjoy a pixel-perfect UI across various screen sizes  
 
----
-
-This project has been developed using the **BLoC state management** pattern and follows a **Clean UI Architecture**, ensuring a highly maintainable and scalable codebase. It uses the **Hive local database** to provide blazing-fast data persistence and smooth performance across devices.
+This project implements **BLoC state management** and adheres to **Clean UI Architecture** principles for better maintainability and scalability.
 
 ---
 
 ## 🚀 Features
 
-✅ Add/Edit/Delete Employee Information  
-✅ Persist Data using `Hive` (local database)  
-✅ Pixel-perfect UI across different screen resolutions  
-✅ Custom Date Picker aligned with design  
-✅ State Management using `Bloc` / `Cubit`  
-✅ Clean UI Architecture for maintainability  
-✅ Responsive UI & error handling for edge cases  
-✅ Flutter Web version hosted for preview
+- ✅ Add, Edit, Delete Employee Information  
+- ✅ Local Data Persistence with `Hive`  
+- ✅ Pixel-perfect and Responsive UI  
+- ✅ Custom Date Picker Implementation  
+- ✅ BLoC / Cubit-based State Management  
+- ✅ Clean UI Architecture for scalable codebase  
+- ✅ Flutter Web support for easy preview  
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Flutter**
-- **Dart**
-- **Hive** for local data persistence
-- **BLoC / Cubit** for state management
-- **Clean Architecture**
-- **Responsive Framework** for adaptive UI
-- **Flutter Web** for deployment
+- **Flutter**  
+- **Dart**  
+- **Hive** for local storage  
+- **BLoC / Cubit** for state management  
+- **Clean Architecture**  
+- **Responsive Framework** for adaptive UI  
+- **Flutter Web** for deployment  
 
 ---
-
-
 
 ## 💡 Setup Instructions
 
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/giridat/realtime_innovations_project
-   cd employee_manager_flutter
-   ```
+### 1. Clone the Repository
+```bash
+git clone https://github.com/giridat/employee_manager_flutter.git
+cd employee_manager_flutter
 
-2. **Install Dependencies**
-   ```bash
-   flutter pub get
-   ```
+2. Install Dependencies
 
-3. **Run Code Generation (important before running the app)**
-   ```bash
-   dart run build_runner build --delete-conflicting-outputs
-   ```
+flutter pub get
 
-4. **Run the App**
-   ```bash
-   flutter run
-   ```
+3. Run Code Generation
 
-5. **Build APK**
-   ```bash
-   flutter build apk --release
-   ```
+dart run build_runner build --delete-conflicting-outputs
 
-6. **For Web Version**
-   ```bash
-   flutter build web
-   ```
+4. Run the App
 
----
-## 🎥 Video Walkthrough
+flutter run
 
-The screen recording covers:
+5. Build Release APK
 
-- App walkthrough on mobile
-- All UI components in action
-- Adding, editing, and deleting employees
-- Date picker usage
-- Handling edge cases (empty fields, validations)
-- Web app preview
+flutter build apk --release
+
+6. Build Web Version
+
+flutter build web
+
 
 ---
 
-## 🙏 Acknowledgment
+🎥 Video Walkthrough
 
-Thanks to **Realtime Innovations** for the opportunity. Looking forward to the next steps!
+A detailed walkthrough of the app covers:
+
+Adding, editing, and deleting employee records
+
+Custom date picker usage
+
+Handling empty fields and validations
+
+Web app demonstration
+
+
+
+---
+
+🙏 Acknowledgment
+
+Thanks for checking out the Employee Manager project!
+If you're interested in contributing, collaborating, or discussing Flutter architecture, feel free to reach out.
+
+
+---
+
+Author: Giridhar Raut
+GitHub: https://github.com/giridat
